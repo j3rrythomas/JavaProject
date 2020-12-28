@@ -7,26 +7,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 class Main{
     public static void main(String[] args) throws IOException,GeneralSecurityException{
         //Files contains all the files which are placed in folders in the Google Drive
-        try{
-            List<OnlineClassFile> files = StartDrive.getFiles();
 
-            for(OnlineClassFile file:files){
-                System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
-                    file.getName(),
-                    file.getId(),
-                    file.getDateCreated().toString(),
-                    file.getType(),
-                    file.getWebViewLink(),
-                    file.getParentName() );
-            }
-        }
-        catch(IOException ex){
-            System.out.println("Runtime Exception Occured");
-        }
-    }
+        //Function which upates the Database
+        // JDBC.updateDatabase();
 
-}
+        //Function which shows the showDatabase
+        JDBC.showDatabase();
+
+      }
+
+
+      }
