@@ -52,20 +52,20 @@ public class OnlineClassFile{
         return tempDate;
     }
 
-    public void setFileName(String x){fileName= x;}
+    public OnlineClassFile setName(String x){fileName= x; return this;}
     public OnlineClassFile setParentName(String x){parentName = x; return this;}
-    public void setParentId(String x){parentId= x;}
-    public void setWebLink(String x){webLink = x;}
-    public void setType(String x){type= x;}
-    public void setFileId(String x){fileId = x;}
+    public OnlineClassFile setParentId(String x){parentId= x; return this;}
+    public OnlineClassFile setWebViewLink(String x){webLink = x; return this;}
+    public OnlineClassFile setType(String x){type= x; return this;}
+    public OnlineClassFile setId(String x){fileId = x;return this;}
 
 
-    public String getFileName(){return fileName;}
+    public String getName(){return fileName;}
     public String getParentName(){return parentName;}
     public String getParentId(){return parentId;}
-    public String getWebLink(){return webLink;}
+    public String getWebViewLink(){return webLink;}
     public String getType(){return type;}
-    public String getFileId(){return fileId;}
-    public String getDateCreated(){return dateCreated.toString();}
+    public String getId(){return fileId;}
+    public GregorianCalendar getDateCreated(){return dateCreated;}
 
 }

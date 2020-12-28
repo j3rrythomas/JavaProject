@@ -58,9 +58,8 @@ public class StartDrive
         return new AuthorizationCodeInstalledApp(flow,receiver).authorize("user");
     }
 
-    public static void main(String[] args) throws IOException, GeneralSecurityException
+    public static List<OnlineClassFile> getFiles() throws IOException, GeneralSecurityException
     {
-        //String url = "https://drive.google.com/drive/u/1/folders/1Q9U60MDa-cbd4ND6jEcnfkI3nzXtCRqr";
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         List<OnlineClassFile> completeFileList = new ArrayList<OnlineClassFile>();
@@ -128,7 +127,7 @@ public class StartDrive
             //Drive.Files.List
             String filePageToken = null;
             String folderPageToken = null;
-            
+
             do{
                 FileList fileList = service.files().list()
                 .setQ("mimeType!='application/vnd.google-apps.folder'")
@@ -162,9 +161,11 @@ public class StartDrive
 
             }while(filePageToken!=null);
 
+            /*
             System.out.println("Total Item in folders = "+completeFileList.size());
             System.out.println("The files are: ");
-
+            */
+            
             do{
                 FileList folderList = service.files().list().setPageSize(10)
                 .setQ("mimeType='application/vnd.google-apps.folder'")
@@ -192,15 +193,17 @@ public class StartDrive
 
             }while(folderPageToken!=null);
 
-            for (OnlineClassFile file : completeFileList){
+            /*for (OnlineClassFile file : completeFileList){
                 System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
-                      file.getFileName(),
-                      file.getFileId(),
-                      file.getDateCreated(),
+                      file.getName(),
+                      file.getId(),
+                      file.getDateCreated().toString(),
                       file.getType(),
-                      file.getWebLink(),
+                      file.getWebViewLink(),
                       file.getParentName() );
-            }
+            }*/
+
+
 
         }
 
@@ -213,5 +216,6 @@ public class StartDrive
         {
             System.out.println("Runtime Exception Occured");
         }
+        return completeFileList;
     }
 }
