@@ -32,14 +32,14 @@ public class OnlineClassFile{
         //Assuming the dateCreated is in RFC3339 format
         // yyyy-mm-ddTHH:MM.milliseconds(3 decimal places)[Time zone]
         int year = Integer.parseInt(dateCreated.substring(0,4));
-        int month = Integer.parseInt(dateCreated.substring(5,7))-1; //Since months are numbered from 0 to 11
+        int month = Integer.parseInt(dateCreated.substring(5,7)); //Since months are numbered from 0 to 11
         int day = Integer.parseInt(dateCreated.substring(8,10));
 
         int hour = Integer.parseInt(dateCreated.substring(11,13));
         int minute = Integer.parseInt(dateCreated.substring(14,16));
         int second = Integer.parseInt(dateCreated.substring(17,18));
 
-        tempDate.set(year,month,day,hour,minute,second);
+        tempDate.set(year,month-1,day,hour,minute,second);
 
         if(dateCreated.substring(23,24).equals("Z")){
             //Then the time is in UTC no converstion needed

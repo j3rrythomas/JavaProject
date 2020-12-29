@@ -13,9 +13,9 @@ import java.util.TimeZone;
 class Main{
     public static void main(String[] args) throws IOException,GeneralSecurityException{
         //Files contains all the files which are placed in folders in the Google Drive
-        List<OnlineClassFile>files = StartDrive.getFiles();
+        //List<OnlineClassFile>files = StartDrive.getFiles();
         //Function which upates the Database
-        // JDBC.updateDatabase();
+        JDBC.updateDatabase();
 
         //Function which shows the showDatabase
           JDBC.showDatabase();
