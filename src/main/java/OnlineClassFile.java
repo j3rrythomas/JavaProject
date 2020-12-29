@@ -32,7 +32,7 @@ public class OnlineClassFile{
         //Assuming the dateCreated is in RFC3339 format
         // yyyy-mm-ddTHH:MM.milliseconds(3 decimal places)[Time zone]
         int year = Integer.parseInt(dateCreated.substring(0,4));
-        int month = Integer.parseInt(dateCreated.substring(5,7));
+        int month = Integer.parseInt(dateCreated.substring(5,7))-1; //Since months are numbered from 0 to 11
         int day = Integer.parseInt(dateCreated.substring(8,10));
 
         int hour = Integer.parseInt(dateCreated.substring(11,13));

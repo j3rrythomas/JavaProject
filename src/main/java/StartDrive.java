@@ -96,7 +96,14 @@ public class StartDrive
                 for(File file : files)
                 {
                     System.out.printf("%s (%s) Time: %s Type: %s  Click here To View File: %s %s\n\n",
-                            file.getName(),
+                        for(OnlineClassFile file:files){
+            // System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
+            //     file.getName(),
+            //     file.getId(),
+            //     file.getDateCreated().toString(),
+            //     file.getType(),
+            //     file.getWebViewLink(),
+            //     file.getParentName() );    file.getName(),
                             file.getId(),
                             file.getCreatedTime(),
                             file.getMimeType(),
@@ -165,7 +172,7 @@ public class StartDrive
             System.out.println("Total Item in folders = "+completeFileList.size());
             System.out.println("The files are: ");
             */
-            
+
             do{
                 FileList folderList = service.files().list().setPageSize(10)
                 .setQ("mimeType='application/vnd.google-apps.folder'")

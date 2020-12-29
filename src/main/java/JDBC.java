@@ -63,7 +63,7 @@ class JDBC{
 
             String parent=file.getParentName();
             GregorianCalendar cal=file.getDateCreated();
-            String date=cal.get(GregorianCalendar.DATE)+"-"+cal.get(GregorianCalendar.MONTH)+"-"+cal.get(GregorianCalendar.YEAR);
+            String date=String.valueOf(cal.get(GregorianCalendar.DATE))+"-"+String.valueOf(cal.get(GregorianCalendar.MONTH)+1)+"-"+String.valueOf(cal.get(GregorianCalendar.YEAR));
 
             if(parent.equals("Ds lectures") || parent.equals("Java classes") ||parent.equals("lsd lectures"))
             {
