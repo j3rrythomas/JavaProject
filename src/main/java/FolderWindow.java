@@ -7,7 +7,7 @@ public class FolderWindow {
 
     public FolderWindow()
     {
-       
+
         JFrame jf = new JFrame("The lectures");
         jf.setLayout(new FlowLayout(FlowLayout.CENTER,100,100));
         jf.setSize(1000, 1000);
@@ -21,10 +21,12 @@ public class FolderWindow {
         //the main panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
         jf.add(mainPanel);
-        
-        //components in the panel
 
-        //ROW 0
+        //components in the panel
+        
+
+
+        /*//ROW 0
         JLabel lectures = new JLabel("Here are the lectures !!!");
         lectures.setFont(new Font("Raleway",Font.PLAIN,30));
         //lectures.setBackground(Color.CYAN);
@@ -37,7 +39,7 @@ public class FolderWindow {
         mainPanel.add(lectures,gbc);
 
         //ROW 1
-        
+
          ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/data icon.jpg");
          JButton dataButton = new JButton(dataIcon);
          dataButton.setBackground(Color.BLACK);
@@ -91,14 +93,7 @@ public class FolderWindow {
          gbc.gridy = 2;
          gbc.gridwidth = 1;
          gbc.fill = GridBagConstraints.HORIZONTAL;
-         mainPanel.add(lsdLabel,gbc);
+         mainPanel.add(lsdLabel,gbc);*/
 
-
-
-
-        
-
-        
-       
     }
 }
