@@ -2,7 +2,8 @@
 This is the main class file The program excecution begins here
 **************************************************************/
 import java.security.GeneralSecurityException;
-import java.io.IOException;
+import java.io.*;
+// import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.HashMap;
 
-class Main{
+class Main implements java.io.Serializable{
     List<OnlineClassFile> files;
     HashMap <String, String> folders;
 
@@ -42,6 +43,18 @@ class Main{
         //JDBC.showDatabase();
         Main driveFiles = new Main();
 
+        serializeData(driveFiles);
+        Main data=deserializeData();
+        for(OnlineClassFile file:data.files)
+        {
+          System.out.println(file.getName());
+          System.out.println(file.getParentName());
+          System.out.println(file.getId());
+
+
+        }
+
+
         /*for(OnlineClassFile file:files){
                  System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
                      file.getName(),
@@ -55,4 +68,50 @@ class Main{
         new OpenWindow(driveFiles);
 
         }
+
+      static void serializeData(Main object)throws IOException,GeneralSecurityException
+      {
+        try
+        {
+          FileOutputStream fos=new FileOutputStream("data.txt");
+          ObjectOutputStream oos=new ObjectOutputStream(fos);
+          oos.writeObject(object);
+          oos.close();
+          fos.close();
+          System.out.println("Serialization Successful");
+        }
+        catch(FileNotFoundException e)
+        {
+          File f1=new File("data.txt");
+          f1.createNewFile();
+          System.out.println("File Created");
+        }
+        catch(Exception e)
+        {
+          e.printStackTrace();
+        }
+      }
+
+      static Main deserializeData()throws IOException,GeneralSecurityException
+      {
+        Main object=null;
+        try
+        {
+          FileInputStream fis=new FileInputStream("data.txt");
+          ObjectInputStream ois=new ObjectInputStream(fis);
+          object=(Main)ois.readObject();
+          // System.out.println(object.files);
+          System.out.println("Deserialization Successful");
+
+        }
+        catch(FileNotFoundException e)
+        {
+          System.out.println("Invalid file name");
+        }
+        catch(Exception e)
+        {
+          e.printStackTrace();
+        }
+        return object;
+      }
 }
