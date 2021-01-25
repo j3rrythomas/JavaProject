@@ -66,8 +66,9 @@ public class StartDrive
         List<File> completeFolderList = new ArrayList<File>();
 
         try{
+            //System.out.println("Ahoy matey");
             Drive service = new Drive.Builder(HTTP_TRANSPORT,JSON_FACTORY,getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)//.setRootUrl(url)
+                .setApplicationName(APPLICATION_NAME)
                 .build();
 
         /*    FileList result = service.files().list()
