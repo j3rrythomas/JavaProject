@@ -11,16 +11,18 @@ public class OpenWindow
 {
     JFrame mainWindow;
     JFrame folderWindow;
+    JFrame selectFolderWindow;
     ArrayList<JButton> folderButtons;
     Main driveFiles;
+    ArrayList<String> requiredFolders;
 
     public OpenWindow()
     {
         createMainWindow();
-
     }
 
-    public void createMainWindow(){
+    public void createMainWindow()
+    {
         if(mainWindow == null){
 
             mainWindow = new JFrame("Welcome");
@@ -72,6 +74,11 @@ public class OpenWindow
             gbc.gridwidth = 1;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             mainPanel.add(addFolders,gbc);
+            addFolders.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+                    new ChooseFolder();
+                }
+            });
 
             //the update button
             JButton viewLectures = addMainWindowButton("ViewLectures");
@@ -79,11 +86,13 @@ public class OpenWindow
             gbc.gridy = 4;
             mainPanel.add(viewLectures,gbc);
 
+
             viewLectures.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
                         try{
                             driveFiles = Main.deserializeData();
                             if(driveFiles !=null){
+
                                 mainWindow.setVisible(false);
                                 FolderWindow();
                             }
@@ -135,6 +144,7 @@ public class OpenWindow
         folderWindow.setVisible(true);
         folderWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
         //for setting the layout of the panel
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10,10,20,20);
@@ -142,15 +152,8 @@ public class OpenWindow
         JPanel mainPanel = new JPanel(new GridBagLayout());
         folderWindow.add(mainPanel);
 
-        //components in the panel
-
-
-
-        //ROW 0
         JLabel lectures = new JLabel("Here are the lectures !!!");
         lectures.setFont(new Font("Raleway",Font.PLAIN,30));
-        //lectures.setBackground(Color.CYAN);
-        //lectures.setOpaque(true);
         lectures.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -158,43 +161,69 @@ public class OpenWindow
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(lectures,gbc);
 
-        if(folderButtons == null){
-            folderButtons =  new ArrayList<JButton>();
-            ArrayList<String> folderNames = new ArrayList<String>();
+        if(folderButtons == null)
+        {
+            try{
+                folderButtons =  new ArrayList<JButton>();
+                ArrayList<String> folderNames = new ArrayList<String>();
+                requiredFolders = FolderList.loadFolderList();
 
-            for(String str : driveFiles.getFolderList().keySet())
-            {
-                //if(driveFiles.getFolderList().get(str).equals())
-                folderNames.add(driveFiles.getFolderList().get(str));
-                System.out.println(driveFiles.getFolderList().get(str));
-            }
-
-
-            ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/data icon.jpg");
-            int k = 0; // To keep track of the folders that are displayed
-
-            gbc.gridwidth=1;
-            for(int i = 1; i<=folderNames.size()/3;i+=2) //y loop +=2 because we are printing folder icon and the label
-                            //+1 in the condition is the offset for y axis
-            {
-                for(int j = 0;j<3;j++)// x loop
+                for(String str : driveFiles.getFolderList().keySet())
                 {
-                    if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
-                        gbc.gridx = j;
-                        gbc.gridy = i+1;
-                        folderButtons.add(new JButton(dataIcon));
-                        mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
-
-                        gbc.gridy = i+2;
-                        mainPanel.add(new JLabel(folderNames.get(k)),gbc);
-                        k++;
+                    if(!driveFiles.getFolderList().get(str).equals("") && requiredFolders.contains(driveFiles.getFolderList().get(str))){
+                    //if()
+                        folderNames.add(driveFiles.getFolderList().get(str));
                     }
                 }
-            } //y loop ended
+                if(requiredFolders.size() > folderNames.size())
+                {
+                    OpenWindow.alertWindow(
+                    "ALERT!"+"\n"+"Some of the Folders entered are not found in the\n Google Drive"+
+                    "The Folders enterd are "+requiredFolders.toString()+"\n"+
+                    "The Folders in the Google Drive are "+driveFiles.getFolderList().values().toString()
+                    );
+                }
 
+                ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/data icon.jpg");
+                int k = 0; // To keep track of the folders that are displayed
+
+                gbc.gridwidth=1;
+                for(int i = 0; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
+                                //+1 in the condition is the offset for y axis
+                {
+                    for(int j = 0;j<3;j++)// x loop
+                    {
+                        if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
+                            gbc.gridx = j;
+                            gbc.gridy = i+1;
+                            folderButtons.add(new JButton(dataIcon));
+                            mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
+
+                            gbc.gridy = i+2;
+                            mainPanel.add(new JLabel(folderNames.get(k)),gbc);
+
+                            k++;
+                        }
+                    }
+                } //y loop ended
+            }
+            catch(IOException e){
+                OpenWindow.alertWindow(e.getMessage());
+            }
         }
-
+        else
+        {
+            OpenWindow.alertWindow("You have to add folders from the drive to continue");
+            /*******************************/ //This is a make shift code and must be changed
+            folderWindow.setVisible(false);
+            mainWindow.setVisible(true);
+            /*******************************/
+        }
+        JScrollPane pane = new JScrollPane(mainPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        folderWindow.setContentPane(pane);
     }
+
+
 
     private JButton addMainWindowButton(String buttonLabel)
     {
@@ -206,6 +235,7 @@ public class OpenWindow
 
         return button;
     }
+
     public static void alertWindow(String str)
     {
         JOptionPane.showMessageDialog(null,str);

@@ -24,7 +24,7 @@ public class LecturesWindow
         jf.setSize(1000, 1000);
         jf.setLocation(450, 500);
         jf.setVisible(true);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
          //for setting the layout of the panel
          GridBagConstraints gbc = new GridBagConstraints();
