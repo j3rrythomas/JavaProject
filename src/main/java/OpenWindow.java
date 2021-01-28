@@ -4,6 +4,8 @@ import javax.swing.*;
 
 import java.util.ArrayList;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class OpenWindow
 {
@@ -12,86 +14,115 @@ public class OpenWindow
     ArrayList<JButton> folderButtons;
     Main driveFiles;
 
-    public OpenWindow(Main files)
+    public OpenWindow()
     {
-        driveFiles = files;
         createMainWindow();
 
     }
 
     public void createMainWindow(){
-        mainWindow = new JFrame("Welcome");
-        mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER,50,50));
-        mainWindow.setSize(1000, 1000);
-        mainWindow.setLocation(450, 500);
-        mainWindow.setVisible(true);
-        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(mainWindow == null){
 
-        //for setting the layout of the panel
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,10,20,20);
-        //creating the panel for displaying name and icon
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainWindow.add(mainPanel);
+            mainWindow = new JFrame("Welcome");
+            mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER,50,50));
+            mainWindow.setSize(1000, 1000);
+            mainWindow.setLocation(450, 500);
+            mainWindow.setVisible(true);
+            mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Creating icon
-        ImageIcon icon = new ImageIcon("src/main/resources/Images/classFind.jpg");
-        //label for icon
-        JLabel imgLabel = new JLabel(icon,JLabel.CENTER);
-        imgLabel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(imgLabel,gbc);
+            //for setting the layout of the panel
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10,10,20,20);
+            //creating the panel for displaying name and icon
+            JPanel mainPanel = new JPanel(new GridBagLayout());
+            mainWindow.add(mainPanel);
+        {
+            //Creating icon
+            ImageIcon icon = new ImageIcon("src/main/resources/Images/classFind.jpg");
+            //label for icon
+            JLabel imgLabel = new JLabel(icon,JLabel.CENTER);
+            imgLabel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridwidth = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            mainPanel.add(imgLabel,gbc);
 
-        //label for "ClassFind"
-        JLabel nameLabel = new JLabel("Welcome to ClassFind",JLabel.CENTER);
-        nameLabel.setFont(new Font("Raleway",Font.BOLD,30));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(nameLabel,gbc);
+            //label for "ClassFind"
+            JLabel nameLabel = new JLabel("Welcome to ClassFind",JLabel.CENTER);
+            nameLabel.setFont(new Font("Raleway",Font.BOLD,30));
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            gbc.gridwidth = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            mainPanel.add(nameLabel,gbc);
 
-        //label for caption
-        JLabel captionLabel = new JLabel("A place where you can find the your lectures!",JLabel.CENTER);
-        captionLabel.setFont(new Font("Raleway",Font.ITALIC,18));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(captionLabel,gbc);
+            //label for caption
+            JLabel captionLabel = new JLabel("A place where you can find the your lectures!",JLabel.CENTER);
+            captionLabel.setFont(new Font("Raleway",Font.ITALIC,18));
+            gbc.gridx = 0;
+            gbc.gridy = 2;
+            gbc.gridwidth = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            mainPanel.add(captionLabel,gbc);
+        }
+            JButton addFolders = addMainWindowButton("Add Folders to track");
+            gbc.gridx = 0;
+            gbc.gridy = 3;
+            gbc.gridwidth = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            mainPanel.add(addFolders,gbc);
 
-        JButton addFolders = new JButton("Add Folders to track");
-        addFolders.setPreferredSize(new Dimension(40, 40));
-        addFolders.setBackground(Color.GREEN);
-        addFolders.setForeground(Color.DARK_GRAY);
-        addFolders.setFont(new Font("Raleway",Font.BOLD,18));
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(addFolders,gbc);
+            //the update button
+            JButton viewLectures = addMainWindowButton("ViewLectures");
+            gbc.gridx = 0;
+            gbc.gridy = 4;
+            mainPanel.add(viewLectures,gbc);
 
-        //the update button
-        JButton updateButton = new JButton("Start Search");
-        updateButton.setPreferredSize(new Dimension(40, 40));
-        updateButton.setBackground(Color.GREEN);
-        updateButton.setForeground(Color.DARK_GRAY);
-        updateButton.setFont(new Font("Raleway",Font.BOLD,18));
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(updateButton,gbc);
+            viewLectures.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+                        try{
+                            driveFiles = Main.deserializeData();
+                            if(driveFiles !=null){
+                                mainWindow.setVisible(false);
+                                FolderWindow();
+                            }
+                        }
+                        catch(IOException err)
+                        {
+                            alertWindow("No Existing class files found please update the database");
+                        }
+                        catch(GeneralSecurityException err)
+                        {
+                            alertWindow("Security exception occured");
+                        }
+                    };
+                }
+            );
 
-        updateButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                    mainWindow.setVisible(false);
-                    FolderWindow();
-            };
-        });
+            JButton updateDatabase = addMainWindowButton("Start Search");
+            gbc.gridx = 0;
+            gbc.gridy = 5;
+            updateDatabase.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e)
+                {
+                    try{
+                        driveFiles = new Main();
+                        Main.serializeData(driveFiles);
+                    }
+                    catch(IOException err)
+                    {
+                        alertWindow("IOException occured");
+                    }
+                    catch(GeneralSecurityException err)
+                    {
+                        alertWindow("Security exception occured");
+                    }
+                }
+            });
+            mainPanel.add(updateDatabase, gbc);
+
+        }
     }
 
     public void FolderWindow()
@@ -143,18 +174,18 @@ public class OpenWindow
             int k = 0; // To keep track of the folders that are displayed
 
             gbc.gridwidth=1;
-            for(int i = 1; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
+            for(int i = 1; i<=folderNames.size()/3;i+=2) //y loop +=2 because we are printing folder icon and the label
                             //+1 in the condition is the offset for y axis
             {
                 for(int j = 0;j<3;j++)// x loop
                 {
                     if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
                         gbc.gridx = j;
-                        gbc.gridy = i;
+                        gbc.gridy = i+1;
                         folderButtons.add(new JButton(dataIcon));
                         mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
 
-                        gbc.gridy = i+1;
+                        gbc.gridy = i+2;
                         mainPanel.add(new JLabel(folderNames.get(k)),gbc);
                         k++;
                     }
@@ -163,5 +194,20 @@ public class OpenWindow
 
         }
 
+    }
+
+    private JButton addMainWindowButton(String buttonLabel)
+    {
+        JButton button = new JButton(buttonLabel);
+        button.setPreferredSize(new Dimension(40, 40));
+        button.setBackground(Color.GREEN);
+        button.setForeground(Color.DARK_GRAY);
+        button.setFont(new Font("Raleway",Font.BOLD,18));
+
+        return button;
+    }
+    public static void alertWindow(String str)
+    {
+        JOptionPane.showMessageDialog(null,str);
     }
 }
