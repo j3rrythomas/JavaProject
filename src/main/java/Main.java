@@ -52,6 +52,8 @@ class Main implements java.io.Serializable{
                  }*/
 
         new OpenWindow();
+        new LecturesWindow();
+       
 
         }
 
@@ -101,4 +103,5 @@ class Main implements java.io.Serializable{
         }
         return object;
       }
+      
 }

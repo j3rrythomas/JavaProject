@@ -1,8 +1,9 @@
 import java.awt.*;
-//import java.awt.event.*;
+import java.awt.event.*;
+
 import javax.swing.*;
 
-public class LecturesWindow 
+public class LecturesWindow
 {
     JFrame jf;
     String frameName = "DS lectures";
@@ -10,6 +11,10 @@ public class LecturesWindow
     JPanel lecturesPanel;
     //for setting the layout of lecturesPanel
     GridBagConstraints gpc = new GridBagConstraints();
+
+    //for the dropdown for selecting dates
+    JComboBox<String> dateChooser;
+    String date[] = {"22-08-2000","23-00-2010","01-05-2016","22-09-2019"};
    
 
     public LecturesWindow()
@@ -45,14 +50,22 @@ public class LecturesWindow
         mainPanel.add(lecturesPanel,gbc);
 
         //the searchPanel
-        JLabel dateLabel = new JLabel("dd-mm-yyyy");
+        JLabel dateLabel = new JLabel("Choose the date");
         dateLabel.setFont(new Font("Raleway",Font.BOLD,14));
         dateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         searchPanel.add(dateLabel);
 
-        JTextField dateField = new JTextField();
-        dateField.setPreferredSize(new Dimension(150,30));
-        searchPanel.add(dateField);
+        //Drop down menu to choose the date
+        dateChooser = new JComboBox<String>(date);
+        dateChooser.setPreferredSize(new Dimension(130,30));
+        searchPanel.add(dateChooser);
+
+        //Handling selections
+        dateChooser.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                String s = (String) dateChooser.getSelectedItem();
+            }
+        });
 
         JButton searchButton = new JButton("Search");
         searchButton.setPreferredSize(new Dimension(100,30));

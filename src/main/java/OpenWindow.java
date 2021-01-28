@@ -58,7 +58,7 @@ public class OpenWindow
             mainPanel.add(nameLabel,gbc);
 
             //label for caption
-            JLabel captionLabel = new JLabel("A place where you can find the your lectures!",JLabel.CENTER);
+            JLabel captionLabel = new JLabel("A place where you can find all the lectures!",JLabel.CENTER);
             captionLabel.setFont(new Font("Raleway",Font.ITALIC,18));
             gbc.gridx = 0;
             gbc.gridy = 2;
@@ -210,4 +210,6 @@ public class OpenWindow
     {
         JOptionPane.showMessageDialog(null,str);
     }
-}
+    
+} 
+
