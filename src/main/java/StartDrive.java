@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.HashMap;
 
 public class StartDrive
 {
@@ -64,6 +65,7 @@ public class StartDrive
 
         List<OnlineClassFile> completeFileList = new ArrayList<OnlineClassFile>();
         List<File> completeFolderList = new ArrayList<File>();
+        HashMap <String,ArrayList<OnlineClassFile>> fileMap = new HashMap<String,ArrayList<OnlineClassFile>>();
 
         try{
             //System.out.println("Ahoy matey");

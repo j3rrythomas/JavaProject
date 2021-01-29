@@ -1,12 +1,20 @@
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Arrays;
+import java.io.IOException;
+import java.io.File;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class LecturesWindow
 {
     JFrame jf;
-    String frameName = "DS lectures";
+    String frameName;
 
     JPanel lecturesPanel;
     //for setting the layout of lecturesPanel
@@ -14,11 +22,13 @@ public class LecturesWindow
 
     //for the dropdown for selecting dates
     JComboBox<String> dateChooser;
-    String date[] = {"22-08-2000","23-00-2010","01-05-2016","22-09-2019"};
-   
+    String[] date;
+    ArrayList<OnlineClassFile> lectures;
 
-    public LecturesWindow()
+
+    public LecturesWindow(String folderName)
     {
+        frameName = folderName;
         jf = new JFrame(frameName);
         jf.setLayout(new FlowLayout(FlowLayout.CENTER,100,50));
         jf.setSize(1000, 1000);
@@ -26,11 +36,14 @@ public class LecturesWindow
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-         //for setting the layout of the panel
-         GridBagConstraints gbc = new GridBagConstraints();
-         gbc.insets = new Insets(20,20,5,5);
+        //get the date
+        date = getDate();
 
-         //the panels
+        //for setting the layout of the panel
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(20,20,5,5);
+
+        //the panels
         JPanel mainPanel = new JPanel(new GridBagLayout());
         jf.add(mainPanel);
 
@@ -64,12 +77,21 @@ public class LecturesWindow
         dateChooser.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 String s = (String) dateChooser.getSelectedItem();
+                System.out.println(s);
+                showLectures(s);
             }
         });
 
         JButton searchButton = new JButton("Search");
         searchButton.setPreferredSize(new Dimension(100,30));
         searchButton.setFont(new Font("Raleway",Font.BOLD,15));
+        //Action Lister for the search button
+        searchButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent evt){
+                //String str =
+                //showLectures(str);
+            }
+            });
         searchPanel.add(searchButton);
 
         //Lectures panel components
@@ -91,12 +113,13 @@ public class LecturesWindow
         lecturesPanel.add(WEBLINK,gbc);
 
     }
-    public void showLectures(String data[][])
+    public void showLectures(String data)
     {
         gpc.insets = new Insets(10,10,10,10);
+        int LABEL_POS=0, LINK_POS=1;
         JLabel date,link;
         int i=1,j=0;
-        while(i<=10)
+        /*while(i<=10)
         {
             j=0;
             date = new JLabel(data[j][i], JLabel.CENTER);
@@ -114,6 +137,98 @@ public class LecturesWindow
             gpc.gridwidth = 1;
             gpc.fill = GridBagConstraints.HORIZONTAL;
             lecturesPanel.add(link,gpc);i++;
+        }*/
+        for(OnlineClassFile file: lectures){
+            GregorianCalendar cal = file.getDateCreated();
+            String dateStr = cal.get(5)+"-"+(int)(cal.get(2)+1)+"-"+cal.get(1);
+            ArrayList<JLabel> fileNames = new ArrayList<JLabel>();
+            ArrayList<JButton> linkButtons = new ArrayList<JButton>();
+            if(dateStr.equals(data)){
+
+                JLabel fileName = new JLabel(file.getName());
+                fileName.setFont(new Font("Raleway",Font.PLAIN,14));
+                gpc.gridx = LABEL_POS;
+                gpc.gridy = i;
+                gpc.gridwidth = 1;
+                gpc.fill = GridBagConstraints.HORIZONTAL;
+                lecturesPanel.add(fileName,gpc);
+                fileNames.add(fileName);
+
+                //Add the function to open the browser on clicking the button
+                //TODO: Adjust the position of buttons
+                JButton linkButton = new JButton("Click To open file");
+                linkButton.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent evt){
+                        try{
+                            Desktop dsk = Desktop.isDesktopSupported() ?  Desktop.getDesktop() : null;
+
+                        //    if(dsk != null&& dsk.isSupported(Desktop.Action.BROWSE)){ //this if statement checks for exceptions
+                                dsk.browse(new URI(file.getWebViewLink()));
+                        //    }
+                        //    else{
+                        //        throw new NullPointerException();
+                        //    }
+                        }
+                        catch (UnsupportedOperationException e){
+                            try{
+                                //The fall back process for linux systems with xdg
+                                ProcessBuilder pb = new ProcessBuilder("xdg-open", file.getWebViewLink());
+                                pb.directory(new File("/usr/bin/"));
+                                Process p = pb.start();
+
+                            }
+                            catch(IOException e1){
+                                OpenWindow.alertWindow("An IOException has occurred "+ "\n"+ e1.getMessage());
+                            }
+                        }
+                        catch (NullPointerException e){
+                            OpenWindow.alertWindow("ALERT "+e.getMessage());
+                        }
+                        catch(IOException e){
+                            OpenWindow.alertWindow("ALERT "+e.getMessage());
+                        }
+                        catch (URISyntaxException e){
+                            OpenWindow.alertWindow("ALERT "+e.getMessage());
+                        }
+
+                    }
+                });
+
+                gpc.gridx = LINK_POS;
+                gpc.gridy=i;
+                gpc.gridwidth =1;
+                gpc.fill = GridBagConstraints.HORIZONTAL;
+                lecturesPanel.add(linkButton);
+                linkButtons.add(linkButton);
+                i++;
+            }
         }
+        lecturesPanel.setVisible(false);
+        lecturesPanel.setVisible(true);
+    }
+
+    private void getFiles(){
+        lectures = new ArrayList<OnlineClassFile>();
+        for (OnlineClassFile f : OpenWindow.driveFiles.files){
+            if(f.getParentName().equals(frameName)){
+                lectures.add(f);
+            }
+        }
+    }
+
+    private String[] getDate(){
+        getFiles();
+        ArrayList<String> dates = new ArrayList<String>();
+        for(OnlineClassFile file: lectures){
+            GregorianCalendar cal=file.getDateCreated();
+            String dateStr = cal.get(5)+"-"+(int)(cal.get(2)+1)+"-"+cal.get(1);
+            //dates.add(cal.get(cal.DAY_OF_MONTH)+"-"+(int)(cal.get(cal.MONTH)+1)+"-"+cal.get(cal.YEAR));
+            if(!dates.contains(dateStr))
+                dates.add(dateStr);
+        }
+        Object temp[] = dates.toArray();
+        String[] str = Arrays.copyOf(temp,temp.length,String[].class);
+        return str;
     }
 }

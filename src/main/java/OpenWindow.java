@@ -13,12 +13,15 @@ public class OpenWindow
     JFrame folderWindow;
     JFrame selectFolderWindow;
     ArrayList<JButton> folderButtons;
-    Main driveFiles;
+
+    static Main driveFiles;
     ArrayList<String> requiredFolders;
+    private LecturesWindow lecturesWindow;
 
     public OpenWindow()
     {
         createMainWindow();
+        //lecturesWindow = new LecturesWindow();
     }
 
     public void createMainWindow()
@@ -197,9 +200,18 @@ public class OpenWindow
                             gbc.gridx = j;
                             gbc.gridy = i+1;
                             folderButtons.add(new JButton(dataIcon));
+                            folderButtons.get(folderButtons.size()-1).addActionListener(new ActionListener(){
+                                public void actionPerformed(ActionEvent evt){
+                                    int index = folderButtons.indexOf((JButton)evt.getSource());
+                                    String lectureFolder =  folderNames.get(index);
+                                    System.out.println("Folder at "+index +" is "+ lectureFolder);
+                                    new LecturesWindow(lectureFolder);
+                                }
+                            });
                             mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
 
                             gbc.gridy = i+2;
+
                             mainPanel.add(new JLabel(folderNames.get(k)),gbc);
 
                             k++;
@@ -236,10 +248,10 @@ public class OpenWindow
         return button;
     }
 
+    //This is the go to alert window for showing the errors
     public static void alertWindow(String str)
     {
         JOptionPane.showMessageDialog(null,str);
     }
-    
-} 
 
+}

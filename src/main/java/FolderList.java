@@ -47,7 +47,6 @@ public class FolderList implements java.io.Serializable
         FolderList object;
         try
         {
-
           FileInputStream fis=new FileInputStream("src/main/resources/folderList.txt");
           ObjectInputStream ois=new ObjectInputStream(fis);
           object=(FolderList)ois.readObject();

@@ -10,12 +10,12 @@ import java.util.ListIterator;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.HashMap;
+import java.util.Set;
 
 class Main implements java.io.Serializable{
     List<OnlineClassFile> files;
     HashMap <String, String> folders;
-
-
+    
     Main() throws IOException, GeneralSecurityException
     {
         files = StartDrive.getFiles();
@@ -52,8 +52,8 @@ class Main implements java.io.Serializable{
                  }*/
 
         new OpenWindow();
-        new LecturesWindow();
-       
+        //new LecturesWindow();
+
 
         }
 
@@ -103,5 +103,5 @@ class Main implements java.io.Serializable{
         }
         return object;
       }
-      
+
 }
