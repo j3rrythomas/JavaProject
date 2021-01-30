@@ -115,10 +115,28 @@ public class LecturesWindow
     }
     public void showLectures(String data)
     {
+        lecturesPanel.removeAll();
+
+        JLabel DATE = new JLabel("DATE",JLabel.CENTER);
+        DATE.setFont(new Font("Raleway",Font.ITALIC,15));
+        gpc.gridx = 0;
+        gpc.gridy = 0;
+        gpc.gridwidth = 1;
+        gpc.fill = GridBagConstraints.HORIZONTAL;
+        lecturesPanel.add(DATE,gpc);
+
+        JLabel WEBLINK = new JLabel("WEBLINK",JLabel.CENTER);
+        WEBLINK.setFont(new Font("Raleway",Font.ITALIC,15));
+        gpc.gridx = 1;
+        gpc.gridy = 0;
+        gpc.gridwidth = 1;
+        gpc.fill = GridBagConstraints.HORIZONTAL;
+        lecturesPanel.add(WEBLINK,gpc);
+
         gpc.insets = new Insets(10,10,10,10);
-        int LABEL_POS=0, LINK_POS=1;
+        int LABEL_POS=0, LINK_POS=2;
         JLabel date,link;
-        int i=1,j=0;
+        int i=2,j=0;
         /*while(i<=10)
         {
             j=0;
@@ -141,8 +159,8 @@ public class LecturesWindow
         for(OnlineClassFile file: lectures){
             GregorianCalendar cal = file.getDateCreated();
             String dateStr = cal.get(5)+"-"+(int)(cal.get(2)+1)+"-"+cal.get(1);
-            ArrayList<JLabel> fileNames = new ArrayList<JLabel>();
-            ArrayList<JButton> linkButtons = new ArrayList<JButton>();
+            //ArrayList<JLabel> fileNames = new ArrayList<JLabel>();
+            //ArrayList<JButton> linkButtons = new ArrayList<JButton>();
             if(dateStr.equals(data)){
 
                 JLabel fileName = new JLabel(file.getName());
@@ -150,9 +168,9 @@ public class LecturesWindow
                 gpc.gridx = LABEL_POS;
                 gpc.gridy = i;
                 gpc.gridwidth = 1;
-                gpc.fill = GridBagConstraints.HORIZONTAL;
+                //gpc.fill = GridBagConstraints.HORIZONTAL;
                 lecturesPanel.add(fileName,gpc);
-                fileNames.add(fileName);
+                //fileNames.add(fileName);
 
                 //Add the function to open the browser on clicking the button
                 //TODO: Adjust the position of buttons
@@ -174,7 +192,7 @@ public class LecturesWindow
                             try{
                                 //The fall back process for linux systems with xdg
                                 ProcessBuilder pb = new ProcessBuilder("xdg-open", file.getWebViewLink());
-                                pb.directory(new File("/usr/bin/"));
+                                //pb.directory(new File("/usr/bin/"));
                                 Process p = pb.start();
 
                             }
@@ -199,8 +217,8 @@ public class LecturesWindow
                 gpc.gridy=i;
                 gpc.gridwidth =1;
                 gpc.fill = GridBagConstraints.HORIZONTAL;
-                lecturesPanel.add(linkButton);
-                linkButtons.add(linkButton);
+                lecturesPanel.add(linkButton,gpc);
+                //linkButtons.add(linkButton);
                 i++;
             }
         }
