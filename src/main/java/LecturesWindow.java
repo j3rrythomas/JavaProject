@@ -151,25 +151,7 @@ public class LecturesWindow
         int LABEL_POS=0, LINK_POS=2;
         JLabel date,link;
         int i=2,j=0;
-        /*while(i<=10)
-        {
-            j=0;
-            date = new JLabel(data[j][i], JLabel.CENTER);
-            date.setFont(new Font("Raleway",Font.PLAIN,14));
-            gpc.gridx = j;
-            gpc.gridy = i;
-            gpc.gridwidth = 1;
-            gpc.fill = GridBagConstraints.HORIZONTAL;
-            lecturesPanel.add(date,gpc);j++;
 
-            link = new JLabel(data[j][i], JLabel.CENTER);
-            link.setFont(new Font("Raleway",Font.PLAIN,14));
-            gpc.gridx = j;
-            gpc.gridy = i;
-            gpc.gridwidth = 1;
-            gpc.fill = GridBagConstraints.HORIZONTAL;
-            lecturesPanel.add(link,gpc);i++;
-        }*/
         for(OnlineClassFile file: lectures){
             GregorianCalendar cal = file.getDateCreated();
             String dateStr = cal.get(5)+"-"+(int)(cal.get(2)+1)+"-"+cal.get(1);
@@ -187,7 +169,6 @@ public class LecturesWindow
                 //fileNames.add(fileName);
 
                 //Add the function to open the browser on clicking the button
-                //TODO: Adjust the position of buttons
                 JButton linkButton = new JButton("Click To open file");
                 linkButton.addActionListener(new ActionListener(){
                     @Override

@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 
 public class OpenWindow
 {
@@ -21,12 +26,23 @@ public class OpenWindow
     public OpenWindow()
     {
         createMainWindow();
-        //lecturesWindow = new LecturesWindow();
     }
 
     public void createMainWindow()
     {
         if(mainWindow == null){
+
+            try{
+                File f =  new File("src/main/resources/data.txt");
+                if(f.exists())
+                    driveFiles = Main.deserializeData();
+            }
+            catch(IOException err){
+                    OpenWindow.alertWindow(err.getMessage());
+            }
+            catch (GeneralSecurityException err){
+                    OpenWindow.alertWindow(err.getMessage());
+            }
 
             mainWindow = new JFrame("Welcome");
             mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER,50,50));
@@ -92,21 +108,12 @@ public class OpenWindow
 
             viewLectures.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                        try{
-                            driveFiles = Main.deserializeData();
-                            if(driveFiles !=null){
-
-                                //mainWindow.setVisible(false);
+                        if(driveFiles !=null){
+                            mainWindow.setVisible(false);
+                            //if(folderWindow == null)
                                 FolderWindow();
-                            }
-                        }
-                        catch(IOException err)
-                        {
-                            alertWindow("No Existing class files found please update the database");
-                        }
-                        catch(GeneralSecurityException err)
-                        {
-                            alertWindow("Security exception occured");
+                            //else
+                                //folderWindow.setVisible(true);
                         }
                     };
                 }
@@ -145,7 +152,7 @@ public class OpenWindow
         folderWindow.setSize(1000, 1000);
         folderWindow.setLocation(450, 500);
         folderWindow.setVisible(true);
-        folderWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        folderWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
         //for setting the layout of the panel
@@ -167,7 +174,11 @@ public class OpenWindow
             public void actionPerformed(ActionEvent e)
             {
                 folderWindow.setVisible(false);
-                //mainWindow.setVisible(true);
+                mainWindow.setVisible(true);
+                folderWindow.removeAll();
+                folderButtons.clear();
+                //folderWindow.dispatchEvent(new WindowEvent(folderWindow, WindowEvent.WINDOW_CLOSING));
+                folderWindow.dispose();
             }
         });
 
@@ -180,81 +191,71 @@ public class OpenWindow
         gbc.gridwidth = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(lectures,gbc);
+        try{
+            folderButtons =  new ArrayList<JButton>();
+            ArrayList<String> folderNames = new ArrayList<String>();
+            requiredFolders = FolderList.loadFolderList();
 
-        if(folderButtons == null)
-        {
-            try{
-                folderButtons =  new ArrayList<JButton>();
-                ArrayList<String> folderNames = new ArrayList<String>();
-                requiredFolders = FolderList.loadFolderList();
-
-                for(String str : driveFiles.getFolderList().keySet())
-                {
-                    if(!driveFiles.getFolderList().get(str).equals("") && requiredFolders.contains(driveFiles.getFolderList().get(str))){
-                    //if()
-                        folderNames.add(driveFiles.getFolderList().get(str));
-                    }
+            for(String str : driveFiles.getFolderList().keySet())
+            {
+                if(!driveFiles.getFolderList().get(str).equals("") && requiredFolders.contains(driveFiles.getFolderList().get(str))){
+                //if()
+                    folderNames.add(driveFiles.getFolderList().get(str));
                 }
-                if(requiredFolders.size() > folderNames.size())
+            }
+            if(requiredFolders.size() > folderNames.size())
+            {
+                OpenWindow.alertWindow(
+                "ALERT!"+"\n"+"Some of the Folders entered are not found in the\n Google Drive"+
+                "The Folders enterd are "+requiredFolders.toString()+"\n"+
+                "The Folders in the Google Drive are "+driveFiles.getFolderList().values().toString()
+                );
+            }
+
+            ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/file icon 3.jpg");
+            int k = 0; // To keep track of the folders that are displayed
+
+            gbc.gridwidth=1;
+            for(int i = 1; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
+                            //+1 in the condition is the offset for y axis
+            {
+                for(int j = 0;j<3;j++)// x loop
                 {
-                    OpenWindow.alertWindow(
-                    "ALERT!"+"\n"+"Some of the Folders entered are not found in the\n Google Drive"+
-                    "The Folders enterd are "+requiredFolders.toString()+"\n"+
-                    "The Folders in the Google Drive are "+driveFiles.getFolderList().values().toString()
-                    );
+                    if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
+                        gbc.gridx = j;
+                        gbc.gridy = i+1;
+                        JButton folderButton = new JButton(dataIcon);
+                        folderButton.setBackground(Color.WHITE);
+                        folderButton.setBorder(BorderFactory.createEtchedBorder(1));
+                        folderButtons.add(folderButton);
+                        folderButtons.get(folderButtons.size()-1).addActionListener(new ActionListener(){
+                            public void actionPerformed(ActionEvent evt){
+                                for(JButton b : folderButtons){b.setBorder(BorderFactory.createEtchedBorder(1));}
+                                ((JButton)evt.getSource()).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.BLACK));
+                                int index = folderButtons.indexOf((JButton)evt.getSource());
+                                String lectureFolder =  folderNames.get(index);
+                                System.out.println("Folder at "+index +" is "+ lectureFolder);
+                                new LecturesWindow(lectureFolder);
+                            }
+                        });
+                        mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
+
+                        gbc.gridy = i+2;
+
+                        JLabel folderName = new JLabel(folderNames.get(k),JLabel.CENTER);
+                        folderName.setFont(new Font("Raleway",Font.ITALIC,14));
+                        mainPanel.add(folderName,gbc);
+
+                        k++;
+                    }//
                 }
-
-                ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/file icon 3.jpg");
-                int k = 0; // To keep track of the folders that are displayed
-
-                gbc.gridwidth=1;
-                for(int i = 1; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
-                                //+1 in the condition is the offset for y axis
-                {
-                    for(int j = 0;j<3;j++)// x loop
-                    {
-                        if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
-                            gbc.gridx = j;
-                            gbc.gridy = i+1;
-                            JButton folderButton = new JButton(dataIcon);
-                            folderButton.setBackground(Color.WHITE);
-                            folderButton.setBorder(BorderFactory.createEtchedBorder(1));
-                            folderButtons.add(folderButton);
-                            folderButtons.get(folderButtons.size()-1).addActionListener(new ActionListener(){
-                                public void actionPerformed(ActionEvent evt){
-                                    for(JButton b : folderButtons){b.setBorder(BorderFactory.createEtchedBorder(1));}
-                                    ((JButton)evt.getSource()).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.BLACK));
-                                    int index = folderButtons.indexOf((JButton)evt.getSource());
-                                    String lectureFolder =  folderNames.get(index);
-                                    System.out.println("Folder at "+index +" is "+ lectureFolder);
-                                    new LecturesWindow(lectureFolder);
-                                }
-                            });
-                            mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
-
-                            gbc.gridy = i+2;
-
-                            JLabel folderName = new JLabel(folderNames.get(k),JLabel.CENTER);
-                            folderName.setFont(new Font("Raleway",Font.ITALIC,14));
-                            mainPanel.add(folderName,gbc);
-
-                            k++;
-                        }//
-                    }
-                } //y loop ended
-            }
-            catch(IOException e){
-                OpenWindow.alertWindow(e.getMessage());
-            }
+            } //y loop ended
         }
-        else
-        {
-            OpenWindow.alertWindow("You have to add folders from the drive to continue");
-            /*******************************/ //This is a make shift code and must be changed
-            folderWindow.setVisible(false);
-            mainWindow.setVisible(true);
-            /*******************************/
+        catch(IOException e){
+            OpenWindow.alertWindow(e.getMessage());
         }
+
+
         JScrollPane pane = new JScrollPane(mainPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         folderWindow.setContentPane(pane);
     }

@@ -13,8 +13,8 @@ public class ChooseFolder
     private ArrayList<JLabel> labels;
     private ArrayList<JTextField> textBoxes;
     private ArrayList<JCheckBox> checkBoxes;
-    Main driveFiles;
-   
+    //Main driveFiles;
+
 
     ChooseFolder()
     {
@@ -49,10 +49,10 @@ public class ChooseFolder
             selectFolderWindow.add(submitPanel,BorderLayout.SOUTH);
 
             ArrayList<String> driveFolders = new ArrayList<String>();
-            try{driveFiles = new Main();}catch(Exception e){}
-            for(String str : driveFiles.getFolderList().keySet())
+            //try{driveFiles = new Main();}catch(Exception e){}
+            for(String str : OpenWindow.driveFiles.getFolderList().keySet())
             {
-                driveFolders.add(driveFiles.getFolderList().get(str));
+                driveFolders.add(OpenWindow.driveFiles.getFolderList().get(str));
             }
             for(String s: driveFolders)
             {
