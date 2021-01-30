@@ -13,12 +13,15 @@ public class OpenWindow
     JFrame folderWindow;
     JFrame selectFolderWindow;
     ArrayList<JButton> folderButtons;
-    Main driveFiles;
+
+    static Main driveFiles;
     ArrayList<String> requiredFolders;
+    private LecturesWindow lecturesWindow;
 
     public OpenWindow()
     {
         createMainWindow();
+        //lecturesWindow = new LecturesWindow();
     }
 
     public void createMainWindow()
@@ -93,7 +96,7 @@ public class OpenWindow
                             driveFiles = Main.deserializeData();
                             if(driveFiles !=null){
 
-                                mainWindow.setVisible(false);
+                                //mainWindow.setVisible(false);
                                 FolderWindow();
                             }
                         }
@@ -152,11 +155,28 @@ public class OpenWindow
         JPanel mainPanel = new JPanel(new GridBagLayout());
         folderWindow.add(mainPanel);
 
+        //the back button
+        JButton backButton = new JButton("Back");
+        backButton.setFont(new Font("Raleway",Font.BOLD,14));
+        backButton.setHorizontalAlignment(SwingConstants.RIGHT);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        mainPanel.add(backButton,gbc);
+        backButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e)
+            {
+                folderWindow.setVisible(false);
+                //mainWindow.setVisible(true);
+            }
+        });
+
+
         JLabel lectures = new JLabel("Here are the lectures !!!");
         lectures.setFont(new Font("Raleway",Font.PLAIN,25));
         lectures.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(lectures,gbc);
@@ -188,7 +208,7 @@ public class OpenWindow
                 int k = 0; // To keep track of the folders that are displayed
 
                 gbc.gridwidth=1;
-                for(int i = 0; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
+                for(int i = 1; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
                                 //+1 in the condition is the offset for y axis
                 {
                     for(int j = 0;j<3;j++)// x loop
@@ -196,17 +216,27 @@ public class OpenWindow
                         if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
                             gbc.gridx = j;
                             gbc.gridy = i+1;
-                            JButton b = new JButton(dataIcon);
-                            b.setBackground(Color.WHITE);
-                            b.setBorder(BorderFactory.createEtchedBorder(1));
-                            folderButtons.add(b);
+                            JButton folderButton = new JButton(dataIcon);
+                            folderButton.setBackground(Color.WHITE);
+                            folderButton.setBorder(BorderFactory.createEtchedBorder(1));
+                            folderButtons.add(folderButton);
+                            folderButtons.get(folderButtons.size()-1).addActionListener(new ActionListener(){
+                                public void actionPerformed(ActionEvent evt){
+                                    for(JButton b : folderButtons){b.setBorder(BorderFactory.createEtchedBorder(1));}
+                                    ((JButton)evt.getSource()).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.BLACK));
+                                    int index = folderButtons.indexOf((JButton)evt.getSource());
+                                    String lectureFolder =  folderNames.get(index);
+                                    System.out.println("Folder at "+index +" is "+ lectureFolder);
+                                    new LecturesWindow(lectureFolder);
+                                }
+                            });
                             mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
 
                             gbc.gridy = i+2;
+
                             JLabel folderName = new JLabel(folderNames.get(k),JLabel.CENTER);
                             folderName.setFont(new Font("Raleway",Font.ITALIC,14));
                             mainPanel.add(folderName,gbc);
-                            //mainPanel.add(new JLabel(folderNames.get(k)),gbc);
 
                             k++;
                         }//
@@ -242,10 +272,10 @@ public class OpenWindow
         return button;
     }
 
+    //This is the go to alert window for showing the errors
     public static void alertWindow(String str)
     {
         JOptionPane.showMessageDialog(null,str);
     }
-    
-} 
 
+}

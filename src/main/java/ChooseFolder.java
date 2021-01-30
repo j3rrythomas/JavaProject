@@ -22,12 +22,13 @@ public class ChooseFolder
         textBoxes = new ArrayList<JTextField>();
         checkBoxes = new ArrayList<JCheckBox>();
         selectFolder();
+
     }
 
     public void selectFolder()
     {
-            int LABEL_POS = 0;
-            int FIELD_POS = 1;
+            int LABEL_POS = 0; // The x position of the field where the folder label goes
+            int FIELD_POS = 1; //The x postion of the field where the folder name is to be entered
             selectFolderWindow = new JFrame();
             selectFolderWindow.setLayout(new BorderLayout());
             selectFolderWindow.setSize(400,400);
@@ -35,6 +36,7 @@ public class ChooseFolder
 
             mainPanel  = new JPanel(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10,10,20,20);
             gbc.gridx=0; gbc.gridy=-1;
             gbc.weightx=1;gbc.weighty=1;
             gbc.fill = GridBagConstraints.HORIZONTAL;
