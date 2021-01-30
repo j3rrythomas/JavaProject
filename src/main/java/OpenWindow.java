@@ -153,7 +153,7 @@ public class OpenWindow
         folderWindow.add(mainPanel);
 
         JLabel lectures = new JLabel("Here are the lectures !!!");
-        lectures.setFont(new Font("Raleway",Font.PLAIN,30));
+        lectures.setFont(new Font("Raleway",Font.PLAIN,25));
         lectures.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -184,7 +184,7 @@ public class OpenWindow
                     );
                 }
 
-                ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/data icon.jpg");
+                ImageIcon dataIcon = new ImageIcon("src/main/resources/Images/file icon 3.jpg");
                 int k = 0; // To keep track of the folders that are displayed
 
                 gbc.gridwidth=1;
@@ -196,14 +196,20 @@ public class OpenWindow
                         if(k<folderNames.size()){ //if k becomes greater than or equal to the folderNames then all the folders have been shown
                             gbc.gridx = j;
                             gbc.gridy = i+1;
-                            folderButtons.add(new JButton(dataIcon));
+                            JButton b = new JButton(dataIcon);
+                            b.setBackground(Color.WHITE);
+                            b.setBorder(BorderFactory.createEtchedBorder(1));
+                            folderButtons.add(b);
                             mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
 
                             gbc.gridy = i+2;
-                            mainPanel.add(new JLabel(folderNames.get(k)),gbc);
+                            JLabel folderName = new JLabel(folderNames.get(k),JLabel.CENTER);
+                            folderName.setFont(new Font("Raleway",Font.ITALIC,14));
+                            mainPanel.add(folderName,gbc);
+                            //mainPanel.add(new JLabel(folderNames.get(k)),gbc);
 
                             k++;
-                        }
+                        }//
                     }
                 } //y loop ended
             }

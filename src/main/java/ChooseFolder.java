@@ -12,12 +12,15 @@ public class ChooseFolder
     private JPanel submitPanel;
     private ArrayList<JLabel> labels;
     private ArrayList<JTextField> textBoxes;
-
+    private ArrayList<JCheckBox> checkBoxes;
+    Main driveFiles;
+   
 
     ChooseFolder()
     {
         labels = new ArrayList<JLabel>();
         textBoxes = new ArrayList<JTextField>();
+        checkBoxes = new ArrayList<JCheckBox>();
         selectFolder();
     }
 
@@ -43,7 +46,26 @@ public class ChooseFolder
             submitPanel = new JPanel(new FlowLayout());
             selectFolderWindow.add(submitPanel,BorderLayout.SOUTH);
 
-            JButton addNewField = new JButton("Add field");
+            ArrayList<String> driveFolders = new ArrayList<String>();
+            try{driveFiles = new Main();}catch(Exception e){}
+            for(String str : driveFiles.getFolderList().keySet())
+            {
+                driveFolders.add(driveFiles.getFolderList().get(str));
+            }
+            for(String s: driveFolders)
+            {
+                JCheckBox trackFolderBox = new JCheckBox(s);
+                trackFolderBox.setFont(new Font("Raleway",Font.PLAIN,14));
+                checkBoxes.add(trackFolderBox);
+                gbc.gridy = gbc.gridy+1;
+                gbc.gridx= FIELD_POS;
+                gbc.weightx=2;
+                mainPanel.add(checkBoxes.get(checkBoxes.size()-1),gbc);
+            }
+            JScrollPane pane = new JScrollPane(mainPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            selectFolderWindow.add(pane,BorderLayout.CENTER);
+
+            /*JButton addNewField = new JButton("Add field");
 
 
             addNewField.addActionListener(new ActionListener(){
@@ -63,16 +85,18 @@ public class ChooseFolder
                 }
             });
 
-            submitPanel.add(addNewField);
+            submitPanel.add(addNewField);*/
 
             JButton submit = new JButton("Done");
+            submit.setFont(new Font("Raleway",Font.BOLD,14));
             submit.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
                     try{
                         ArrayList<String> folderList = new ArrayList<String>();
-                        for(JTextField x : textBoxes){
+                        for(JCheckBox x : checkBoxes){
                             try{
-                                folderList.add(x.getText());
+                                if(x.isSelected())
+                                    folderList.add(x.getText());
                             }
                             catch (NullPointerException err){
                                 continue;
