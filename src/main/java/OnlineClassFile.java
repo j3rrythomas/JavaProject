@@ -1,8 +1,9 @@
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.io.Serializable;
 
 
-public class OnlineClassFile{
+public class OnlineClassFile implements Serializable{
     private String fileName;
     private String parentName;
     private String parentId;
