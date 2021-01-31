@@ -33,7 +33,7 @@ public class OpenWindow
         if(mainWindow == null){
 
             try{
-                File f =  new File("build/main/resources/data.txt");
+                File f =  new File("build/resources/main/data.txt");
                 if(f.exists())
                     driveFiles = Main.deserializeData();
             }
