@@ -15,7 +15,7 @@ import java.util.Set;
 class Main implements java.io.Serializable{
     List<OnlineClassFile> files;
     HashMap <String, String> folders;
-    
+
     Main() throws IOException, GeneralSecurityException
     {
         files = StartDrive.getFiles();
@@ -103,5 +103,4 @@ class Main implements java.io.Serializable{
         }
         return object;
       }
-
 }
