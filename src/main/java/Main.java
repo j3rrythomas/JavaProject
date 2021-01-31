@@ -61,17 +61,19 @@ class Main implements java.io.Serializable{
       {
         try
         {
-          FileOutputStream fos=new FileOutputStream("src/main/resources/data.txt");
+          FileOutputStream fos=new FileOutputStream("build/resources/main/data.txt");
           ObjectOutputStream oos=new ObjectOutputStream(fos);
           oos.writeObject(object);
           oos.close();
           fos.close();
-         OpenWindow.alertWindow("Serialization Successful");
+          OpenWindow.alertWindow("Serialization Successful");
         }
         catch(FileNotFoundException e)
         {
-          File f1=new File("data.txt");
+          File f1=new File("build/resources/main/data.txt");
+          System.out.println(f1.getAbsolutePath());
           f1.createNewFile();
+          //Main.serializeData(object);
           System.out.println("File Created");
         }
         catch(Exception e)
@@ -85,7 +87,7 @@ class Main implements java.io.Serializable{
         Main object=null;
         try
         {
-          FileInputStream fis=new FileInputStream("src/main/resources/data.txt");
+          FileInputStream fis=new FileInputStream("build/resources/main/data.txt");
           ObjectInputStream ois=new ObjectInputStream(fis);
           object=(Main)ois.readObject();
           // System.out.println(object.files);

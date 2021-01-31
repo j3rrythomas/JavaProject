@@ -235,7 +235,7 @@ public class LecturesWindow
         ArrayList<String> dates = new ArrayList<String>();
         for(OnlineClassFile file: lectures){
             GregorianCalendar cal=file.getDateCreated();
-            String dateStr = cal.get(5)+"-"+(int)(cal.get(2)+1)+"-"+cal.get(1);
+            String dateStr = cal.get(cal.DAY_OF_MONTH)+"-"+(int)(cal.get(cal.MONTH)+1)+"-"+cal.get(cal.YEAR);
             //dates.add(cal.get(cal.DAY_OF_MONTH)+"-"+(int)(cal.get(cal.MONTH)+1)+"-"+cal.get(cal.YEAR));
             if(!dates.contains(dateStr))
                 dates.add(dateStr);

@@ -33,7 +33,7 @@ public class OpenWindow
         if(mainWindow == null){
 
             try{
-                File f =  new File("src/main/resources/data.txt");
+                File f =  new File("build/main/resources/data.txt");
                 if(f.exists())
                     driveFiles = Main.deserializeData();
             }
@@ -99,7 +99,7 @@ public class OpenWindow
                 }
             });
 
-            //the update button
+
             JButton viewLectures = addMainWindowButton("ViewLectures");
             gbc.gridx = 0;
             gbc.gridy = 4;
@@ -119,6 +119,7 @@ public class OpenWindow
                 }
             );
 
+            //the update button
             JButton updateDatabase = addMainWindowButton("Start Search");
             gbc.gridx = 0;
             gbc.gridy = 5;
@@ -131,7 +132,8 @@ public class OpenWindow
                     }
                     catch(IOException err)
                     {
-                        alertWindow("IOException occured");
+                        alertWindow(err.getMessage());
+                        err.printStackTrace();
                     }
                     catch(GeneralSecurityException err)
                     {
@@ -152,7 +154,7 @@ public class OpenWindow
         folderWindow.setSize(1000, 1000);
         folderWindow.setLocation(450, 500);
         folderWindow.setVisible(true);
-        folderWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        folderWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
         //for setting the layout of the panel
@@ -203,6 +205,7 @@ public class OpenWindow
                     folderNames.add(driveFiles.getFolderList().get(str));
                 }
             }
+
             if(requiredFolders.size() > folderNames.size())
             {
                 OpenWindow.alertWindow(
@@ -228,6 +231,7 @@ public class OpenWindow
                         folderButton.setBackground(Color.WHITE);
                         folderButton.setBorder(BorderFactory.createEtchedBorder(1));
                         folderButtons.add(folderButton);
+
                         folderButtons.get(folderButtons.size()-1).addActionListener(new ActionListener(){
                             public void actionPerformed(ActionEvent evt){
                                 for(JButton b : folderButtons){b.setBorder(BorderFactory.createEtchedBorder(1));}
@@ -238,6 +242,7 @@ public class OpenWindow
                                 new LecturesWindow(lectureFolder);
                             }
                         });
+
                         mainPanel.add(folderButtons.get(folderButtons.size()-1),gbc);
 
                         gbc.gridy = i+2;

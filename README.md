@@ -1,5 +1,4 @@
 # Google Drive Manager
-</br>
 
 This was made to access the recorded class lectures in google meet.  
 The recorded google meet must be shared through google drive.  
@@ -11,8 +10,9 @@ to access all sortes of files in google dirve.
 * Linux-based
 
 ## Requirements for building from source
-1. Gradle
-2. xdg-utils (on linux)
+
+1. [Gradle][gradle-home]
+2. [xdg-utils][xdg-utils-github] (on linux)
 
 ### Installation Process for Gradle
 1. Download (the binaries only) gradle from this [link (Version 6.7.1) ][gradle-6.7.1_dl]  
