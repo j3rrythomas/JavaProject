@@ -50,74 +50,88 @@ public class ChooseFolder
 
             ArrayList<String> driveFolders = new ArrayList<String>();
             //try{driveFiles = new Main();}catch(Exception e){}
-            for(String str : OpenWindow.driveFiles.getFolderList().keySet())
-            {
-                driveFolders.add(OpenWindow.driveFiles.getFolderList().get(str));
-            }
-            for(String s: driveFolders)
-            {
-                JCheckBox trackFolderBox = new JCheckBox(s);
-                trackFolderBox.setFont(new Font("Raleway",Font.PLAIN,14));
-                checkBoxes.add(trackFolderBox);
-                gbc.gridy = gbc.gridy+1;
-                gbc.gridx= FIELD_POS;
-                gbc.weightx=2;
-                mainPanel.add(checkBoxes.get(checkBoxes.size()-1),gbc);
-            }
-            JScrollPane pane = new JScrollPane(mainPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            selectFolderWindow.add(pane,BorderLayout.CENTER);
-
-            /*JButton addNewField = new JButton("Add field");
-
-
-            addNewField.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent e)
-                {
-                    gbc.gridy = gbc.gridy+1;
-                    labels.add(new JLabel("Folder "+ String.valueOf(gbc.gridy+1)));
-                    textBoxes.add(new JTextField());
-                    gbc.gridx = LABEL_POS;
-                    gbc.weightx=1;
-                    mainPanel.add(labels.get(labels.size()-1),gbc);
-                    gbc.gridx= FIELD_POS;
-                    gbc.weightx=2;
-                    mainPanel.add(textBoxes.get(textBoxes.size()-1),gbc);
-                    mainPanel.setVisible(false);
-                    mainPanel.setVisible(true);
-                }
-            });
-
-            submitPanel.add(addNewField);*/
-
-            JButton submit = new JButton("Done");
-            submit.setFont(new Font("Raleway",Font.BOLD,14));
-            submit.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                    try{
-                        ArrayList<String> folderList = new ArrayList<String>();
-                        for(JCheckBox x : checkBoxes){
-                            try{
-                                if(x.isSelected())
-                                    folderList.add(x.getText());
-                            }
-                            catch (NullPointerException err){
-                                continue;
-                            }
-                        }
-                        FolderList fl = new FolderList(folderList);
-                        fl.saveFolderList();
-                        selectFolderWindow.dispose();
-                        }
-
-                    catch(IOException err){
-                        OpenWindow.alertWindow(err.getMessage());
+            try{
+                if(OpenWindow.driveFiles!=null){
+                    for(String str : OpenWindow.driveFiles.getFolderList().keySet())
+                    {
+                        driveFolders.add(OpenWindow.driveFiles.getFolderList().get(str));
+                    }
+                    for(String s: driveFolders)
+                    {
+                        JCheckBox trackFolderBox = new JCheckBox(s);
+                        trackFolderBox.setFont(new Font("Raleway",Font.PLAIN,14));
+                        checkBoxes.add(trackFolderBox);
+                        gbc.gridy = gbc.gridy+1;
+                        gbc.gridx= FIELD_POS;
+                        gbc.weightx=2;
+                        mainPanel.add(checkBoxes.get(checkBoxes.size()-1),gbc);
                     }
                 }
-            });
-            submitPanel.add(submit);
+                else{
+                    throw new NullPointerException("No existing Google Drive Data");
+                }
 
-            mainPanel.setVisible(true);
-            submitPanel.setVisible(true);
-            selectFolderWindow.setVisible(true);
+
+                JScrollPane pane = new JScrollPane(mainPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                selectFolderWindow.add(pane,BorderLayout.CENTER);
+
+                /*JButton addNewField = new JButton("Add field");
+
+
+                addNewField.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        gbc.gridy = gbc.gridy+1;
+                        labels.add(new JLabel("Folder "+ String.valueOf(gbc.gridy+1)));
+                        textBoxes.add(new JTextField());
+                        gbc.gridx = LABEL_POS;
+                        gbc.weightx=1;
+                        mainPanel.add(labels.get(labels.size()-1),gbc);
+                        gbc.gridx= FIELD_POS;
+                        gbc.weightx=2;
+                        mainPanel.add(textBoxes.get(textBoxes.size()-1),gbc);
+                        mainPanel.setVisible(false);
+                        mainPanel.setVisible(true);
+                    }
+                });
+
+                submitPanel.add(addNewField);*/
+
+                JButton submit = new JButton("Done");
+                submit.setFont(new Font("Raleway",Font.BOLD,14));
+                submit.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        try{
+                            ArrayList<String> folderList = new ArrayList<String>();
+                            for(JCheckBox x : checkBoxes){
+                                try{
+                                    if(x.isSelected())
+                                        folderList.add(x.getText());
+                                }
+                                catch (NullPointerException err){
+                                    continue;
+                                }
+                            }
+                            FolderList fl = new FolderList(folderList);
+                            fl.saveFolderList();
+                            selectFolderWindow.dispose();
+                            }
+
+                        catch(IOException err){
+                            OpenWindow.alertWindow(err.getMessage());
+                        }
+                    }
+                });
+                submitPanel.add(submit);
+
+                mainPanel.setVisible(true);
+                submitPanel.setVisible(true);
+                selectFolderWindow.setVisible(true);
+            }
+            catch(NullPointerException e){
+                    OpenWindow.alertWindow(e.getMessage());
+                    selectFolderWindow.dispose();
+
+            }
+        }
     }
-}

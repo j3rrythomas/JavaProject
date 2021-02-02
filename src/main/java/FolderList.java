@@ -19,7 +19,7 @@ public class FolderList implements java.io.Serializable
     {
         try
         {
-          FileOutputStream fos=new FileOutputStream("src/main/resources/folderList.txt");
+          FileOutputStream fos=new FileOutputStream("build/resources/main/folderList.txt");
           ObjectOutputStream oos=new ObjectOutputStream(fos);
           oos.writeObject(this);
           for(String x : folderNameList){
@@ -31,7 +31,7 @@ public class FolderList implements java.io.Serializable
         }
         catch(FileNotFoundException e)
         {
-          File f1=new File("src/main/resources/folderList.txt");
+          File f1=new File("build/resources/main/folderList.txt");
           f1.createNewFile();
           System.out.println("File Created");
         }
@@ -47,7 +47,7 @@ public class FolderList implements java.io.Serializable
         FolderList object;
         try
         {
-          FileInputStream fis=new FileInputStream("src/main/resources/folderList.txt");
+          FileInputStream fis=new FileInputStream("build/main/resources/folderList.txt");
           ObjectInputStream ois=new ObjectInputStream(fis);
           object=(FolderList)ois.readObject();
           System.out.println("Deserialization Successful");

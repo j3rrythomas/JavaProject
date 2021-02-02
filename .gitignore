@@ -4,4 +4,3 @@ build/*
 .gradle/*
 src/main/resources/data.txt
 src/main/resources/folderList.txt
-

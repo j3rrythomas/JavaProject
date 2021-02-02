@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class StartDrive
 {
-    private static final String APPLICATION_NAME = "Google Drive Example";
+    private static final String APPLICATION_NAME = "Google Manager";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance(); //Returns a global Thread safe instace of JacksonFactory
     private static final String TOKENS_DIRECTORY_PATH = "tokens"; //We choose the path to store the data
 
@@ -50,6 +50,7 @@ public class StartDrive
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,new InputStreamReader(in)); //JsonFactory and Reader Objects as parameters
 
         //Build flow and trigger user authoriztion request
+
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT,JSON_FACTORY,clientSecrets,SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
@@ -89,7 +90,6 @@ public class StartDrive
 
 
                   for (File file : fileList.getFiles()){
-
                           if(file.getParents()!=null){
                             completeFileList.add(new OnlineClassFile(
                             file.getName(),file.getId(),
