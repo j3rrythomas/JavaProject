@@ -48,6 +48,7 @@ public class OpenWindow
             mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER,50,50));
             mainWindow.setSize(1000, 1000);
             mainWindow.setLocation(450, 500);
+            mainWindow.getContentPane().setBackground(new Color(255, 180, 162));
             mainWindow.setVisible(true);
             mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -56,13 +57,14 @@ public class OpenWindow
             gbc.insets = new Insets(10,10,20,20);
             //creating the panel for displaying name and icon
             JPanel mainPanel = new JPanel(new GridBagLayout());
+            mainPanel.setBackground(new Color(255, 180, 162));
             mainWindow.add(mainPanel);
         {
             //Creating icon
-            ImageIcon icon = new ImageIcon("src/main/resources/Images/classFind.jpg");
+            ImageIcon icon = new ImageIcon("src/main/resources/Images/classFind1.jpg");
             //label for icon
             JLabel imgLabel = new JLabel(icon,JLabel.CENTER);
-            imgLabel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            //imgLabel.etBorder(BorderFactory.createMatteBorder(5,5,5,5,new Color(245, 213, 71)));
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 1;
@@ -149,6 +151,7 @@ public class OpenWindow
 
         folderWindow = new JFrame("The lectures");
         folderWindow.setLayout(new FlowLayout(FlowLayout.CENTER,100,100));
+        folderWindow.getContentPane().setBackground(new Color(255, 180, 162));
         folderWindow.setSize(1000, 1000);
         folderWindow.setLocation(450, 500);
         folderWindow.setVisible(true);
@@ -160,12 +163,14 @@ public class OpenWindow
         gbc.insets = new Insets(10,10,20,20);
         //the main panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(255, 180, 162));
         folderWindow.add(mainPanel);
 
         //the back button
         JButton backButton = new JButton("Back");
         backButton.setFont(new Font("Raleway",Font.BOLD,14));
         backButton.setHorizontalAlignment(SwingConstants.RIGHT);
+        backButton.setBackground(new Color(52, 246, 242));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 4;
@@ -266,8 +271,9 @@ public class OpenWindow
     {
         JButton button = new JButton(buttonLabel);
         button.setPreferredSize(new Dimension(40, 40));
-        button.setBackground(Color.GREEN);
-        button.setForeground(Color.DARK_GRAY);
+        button.setBackground(new Color(164, 191, 235));
+        button.setForeground(new Color(39, 38, 53));
+        button.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, new Color(186, 39, 74)));
         button.setFont(new Font("Raleway",Font.BOLD,18));
 
         return button;

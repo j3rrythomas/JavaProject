@@ -34,6 +34,7 @@ public class LecturesWindow
         jf.setSize(1000, 1000);
         jf.setLocation(450, 500);
         jf.setVisible(true);
+        jf.getContentPane().setBackground(new Color(255, 180, 162));
         jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //get the date
@@ -45,11 +46,14 @@ public class LecturesWindow
 
         //the panels
         JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(255, 180, 162));
         jf.add(mainPanel);
 
         //back Button
         JButton backButton = new JButton("Back");
         backButton.setFont(new Font("Raleway",Font.BOLD,14));
+        backButton.setBackground(new Color(52, 246, 242));
+        backButton.setForeground(Color.BLACK);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
@@ -70,6 +74,7 @@ public class LecturesWindow
         mainPanel.add(searchPanel,gbc);
 
         lecturesPanel = new JPanel(new GridBagLayout());
+        lecturesPanel.setBackground(new Color(255, 180, 162));
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
@@ -170,6 +175,8 @@ public class LecturesWindow
 
                 //Add the function to open the browser on clicking the button
                 JButton linkButton = new JButton("Click To open file");
+                //linkButton.setBackground(new Color(5, 0, 24, 22));
+                linkButton.setForeground(new Color(186, 59, 70));
                 linkButton.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent evt){
