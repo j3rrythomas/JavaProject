@@ -219,7 +219,7 @@ public class OpenWindow
             int k = 0; // To keep track of the folders that are displayed
 
             gbc.gridwidth=1;
-            for(int i = 1; i<=folderNames.size()/3+1;i+=2) //y loop +=2 because we are printing folder icon and the label
+            for(int i = 1; i<=folderNames.size()/3+3;i+=2) //y loop +=2 because we are printing folder icon and the label
                             //+1 in the condition is the offset for y axis
             {
                 for(int j = 0;j<3;j++)// x loop
