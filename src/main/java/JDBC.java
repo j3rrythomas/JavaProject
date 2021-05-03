@@ -93,17 +93,21 @@ class JDBC{
         }
       }
 
-      public static void showDatabase() throws IOException,GeneralSecurityException
+      public static String[][] showDatabase() throws IOException,GeneralSecurityException
       {
+        String[][] dataArray = new String[100][100];int i=1,j=0;
         try{
-
+            
             // Class.forName("com.mysql.jdbc.Driver");
             Connection con=DriverManager.getConnection(dburl,username,password);
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery("SELECT * FROM LINKS");
             while(rs.next())
             {
-              System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4));
+              //System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4));
+              j = 0;
+              dataArray[j++][i] = rs.getString(3);
+              dataArray[j][i++] = rs.getString(4);
             }
             con.close();
             }
@@ -113,6 +117,6 @@ class JDBC{
         catch(Exception e){
           e.printStackTrace();
         }
-
+        return dataArray;
       }
 }

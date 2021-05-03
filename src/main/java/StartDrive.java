@@ -24,10 +24,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.HashMap;
 
 public class StartDrive
 {
-    private static final String APPLICATION_NAME = "Google Drive Example";
+    private static final String APPLICATION_NAME = "Google Manager";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance(); //Returns a global Thread safe instace of JacksonFactory
     private static final String TOKENS_DIRECTORY_PATH = "tokens"; //We choose the path to store the data
 
@@ -49,6 +50,7 @@ public class StartDrive
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,new InputStreamReader(in)); //JsonFactory and Reader Objects as parameters
 
         //Build flow and trigger user authoriztion request
+
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT,JSON_FACTORY,clientSecrets,SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
@@ -64,6 +66,7 @@ public class StartDrive
 
         List<OnlineClassFile> completeFileList = new ArrayList<OnlineClassFile>();
         List<File> completeFolderList = new ArrayList<File>();
+        HashMap <String,ArrayList<OnlineClassFile>> fileMap = new HashMap<String,ArrayList<OnlineClassFile>>();
 
         try{
             //System.out.println("Ahoy matey");
@@ -71,66 +74,7 @@ public class StartDrive
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        /*    FileList result = service.files().list()
-                .setPageSize(20)
-                .setFields("nextPageToken, files(id,name,createdTime,mimeType,webViewLink,parents)")
-                .execute();
-        */
 
-        /*
-            FileList result2 = service.files().list()
-                  .setPageSize(20).setPageToken(result.getNextPageToken())
-                  .setFields("nextPageToken, files(id,name,createdTime,mimeType,webViewLink,parents)")
-                  .execute();
-
-            List<File> files = result.getFiles();
-
-            List<File> files2 = result2.getFiles();
-
-            if(files == null||files.isEmpty())
-            {
-                System.out.println("No Files found");
-            }
-            else
-            {
-                System.out.println("================Files================");
-                for(File file : files)
-                {
-                    System.out.printf("%s (%s) Time: %s Type: %s  Click here To View File: %s %s\n\n",
-                        for(OnlineClassFile file:files){
-            // System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
-            //     file.getName(),
-            //     file.getId(),
-            //     file.getDateCreated().toString(),
-            //     file.getType(),
-            //     file.getWebViewLink(),
-            //     file.getParentName() );    file.getName(),
-                            file.getId(),
-                            file.getCreatedTime(),
-                            file.getMimeType(),
-                            file.getWebViewLink(),
-                            file.getParents() );
-                }
-            }
-
-            if(files2 == null||files2.isEmpty())
-            {
-                System.out.println("No Files found");
-            }
-            else
-            {
-                System.out.println("================Files================");
-                for(File file : files2)
-                {
-                    System.out.printf("%s (%s) Time: %s Type: %s  Click here To View File: %s %s\n\n",
-                            file.getName(),
-                            file.getId(),
-                            file.getCreatedTime(),
-                            file.getMimeType(),
-                            file.getWebViewLink(),
-                            file.getParents() );
-                }
-            }*/
             //Get the list of files
             //Drive.Files.List
             String filePageToken = null;
@@ -146,15 +90,6 @@ public class StartDrive
 
 
                   for (File file : fileList.getFiles()){
-
-                    /*System.out.printf("%s (%s) Time: %s Type: %s  Click here To View File: %s %s\n\n",
-                          file.getName(),
-                          file.getId(),
-                          file.getCreatedTime(),
-                          file.getMimeType(),
-                          file.getWebViewLink(),
-                          file.getParents() );*/
-
                           if(file.getParents()!=null){
                             completeFileList.add(new OnlineClassFile(
                             file.getName(),file.getId(),
@@ -169,11 +104,6 @@ public class StartDrive
 
             }while(filePageToken!=null);
 
-            /*
-            System.out.println("Total Item in folders = "+completeFileList.size());
-            System.out.println("The files are: ");
-            */
-
             do{
                 FileList folderList = service.files().list().setPageSize(10)
                 .setQ("mimeType='application/vnd.google-apps.folder'")
@@ -182,14 +112,6 @@ public class StartDrive
                 .execute();
 
                 for (File file: folderList.getFiles()){
-                    /*ListIterator<OnlineClassFile> p = completeFileList.listIterator();
-                    while(p.hasNext()){
-                            OnlineClassFile f = p.next();
-                            if(f.getParentId() == file.getId()){
-                                f.setParentName(file.getName());
-                            }
-                    }*/
-
                     for(int i = 0;i<completeFileList.size();i++){
                         if(completeFileList.get(i).getParentId().equals(file.getId())){
                             completeFileList.set(i,completeFileList.get(i).setParentName(file.getName()));
@@ -200,18 +122,6 @@ public class StartDrive
                 folderPageToken = folderList.getNextPageToken();
 
             }while(folderPageToken!=null);
-
-            /*for (OnlineClassFile file : completeFileList){
-                System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
-                      file.getName(),
-                      file.getId(),
-                      file.getDateCreated().toString(),
-                      file.getType(),
-                      file.getWebViewLink(),
-                      file.getParentName() );
-            }*/
-
-
 
         }
 

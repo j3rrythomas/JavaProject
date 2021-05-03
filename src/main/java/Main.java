@@ -3,7 +3,6 @@ This is the main class file The program excecution begins here
 **************************************************************/
 import java.security.GeneralSecurityException;
 import java.io.*;
-// import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,11 @@ import java.util.ListIterator;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.HashMap;
+import java.util.Set;
 
 class Main implements java.io.Serializable{
     List<OnlineClassFile> files;
     HashMap <String, String> folders;
-
 
     Main() throws IOException, GeneralSecurityException
     {
@@ -41,19 +40,6 @@ class Main implements java.io.Serializable{
 
         //Function which shows the showDatabase
         //JDBC.showDatabase();
-        Main driveFiles = new Main();
-
-        serializeData(driveFiles);
-        Main data=deserializeData();
-        for(OnlineClassFile file:data.files)
-        {
-          System.out.println(file.getName());
-          System.out.println(file.getParentName());
-          System.out.println(file.getId());
-
-
-        }
-
 
         /*for(OnlineClassFile file:files){
                  System.out.printf("%s (%s) Time : %s Type: %s  \nClick here To View File: %s \nBelongs To parent: %s\n\n",
@@ -65,7 +51,9 @@ class Main implements java.io.Serializable{
                      file.getParentName() );
                  }*/
 
-        new OpenWindow(driveFiles);
+        new OpenWindow();
+        //new LecturesWindow();
+
 
         }
 
@@ -73,17 +61,19 @@ class Main implements java.io.Serializable{
       {
         try
         {
-          FileOutputStream fos=new FileOutputStream("data.txt");
+          FileOutputStream fos=new FileOutputStream("build/resources/main/data.txt");
           ObjectOutputStream oos=new ObjectOutputStream(fos);
           oos.writeObject(object);
           oos.close();
           fos.close();
-          System.out.println("Serialization Successful");
+          OpenWindow.alertWindow("Serialization Successful");
         }
         catch(FileNotFoundException e)
         {
-          File f1=new File("data.txt");
+          File f1=new File("build/resources/main/data.txt");
+          System.out.println(f1.getAbsolutePath());
           f1.createNewFile();
+          //Main.serializeData(object);
           System.out.println("File Created");
         }
         catch(Exception e)
@@ -97,7 +87,7 @@ class Main implements java.io.Serializable{
         Main object=null;
         try
         {
-          FileInputStream fis=new FileInputStream("data.txt");
+          FileInputStream fis=new FileInputStream("build/resources/main/data.txt");
           ObjectInputStream ois=new ObjectInputStream(fis);
           object=(Main)ois.readObject();
           // System.out.println(object.files);
@@ -106,7 +96,8 @@ class Main implements java.io.Serializable{
         }
         catch(FileNotFoundException e)
         {
-          System.out.println("Invalid file name");
+            OpenWindow.alertWindow("No Existing class files found please update the database");
+          //System.out.println("Invalid file name");
         }
         catch(Exception e)
         {
